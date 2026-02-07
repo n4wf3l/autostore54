@@ -11,25 +11,43 @@ type AccordionItemProps = {
 
 export function AccordionItem({ question, answer, isOpen, onClick }: AccordionItemProps) {
   return (
-    <div className="border-b border-gray-200">
+    <div className={cn(
+      "rounded-xl border-2 transition-all duration-200 mb-3 overflow-hidden",
+      isOpen 
+        ? "border-brand-red bg-gray-50 shadow-md" 
+        : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm hover:bg-gray-50/50"
+    )}>
       <button
         onClick={onClick}
-        className="flex w-full items-center justify-between py-5 text-left font-medium text-gray-900 hover:text-brand-red transition-colors"
+        className="flex w-full items-center justify-between px-5 sm:px-6 py-5 sm:py-6 text-left transition-colors group"
         aria-expanded={isOpen}
       >
-        <span className="text-lg">{question}</span>
+        <span className={cn(
+          "text-[16px] sm:text-[17px] md:text-[18px] font-semibold leading-relaxed pr-4 transition-colors",
+          isOpen ? "text-brand-red" : "text-gray-900 group-hover:text-brand-red"
+        )}>
+          {question}
+        </span>
         <ChevronDown
           className={cn(
-            "h-5 w-5 shrink-0 transition-transform duration-200 text-brand-red",
-            isOpen && "rotate-180"
+            "h-5 w-5 shrink-0 transition-all duration-250 ml-4",
+            isOpen ? "rotate-180 text-brand-red" : "text-gray-500 group-hover:text-brand-red"
           )}
         />
       </button>
-      {isOpen && (
-        <div className="pb-5 pr-12 text-gray-600 leading-relaxed">
-          {answer}
+      
+      <div className={cn(
+        "overflow-hidden transition-all duration-250 ease-in-out",
+        isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+      )}>
+        <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-2">
+          <div className="border-t border-gray-200 pt-4 sm:pt-5">
+            <p className="text-[15px] sm:text-[16px] text-gray-700 leading-relaxed [line-height:1.65]">
+              {answer}
+            </p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
@@ -42,7 +60,7 @@ export function Accordion({ items }: AccordionProps) {
   const [openIndex, setOpenIndex] = React.useState<number | null>(null)
 
   return (
-    <div className="divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white shadow-lg">
+    <div className="space-y-3">
       {items.map((item, index) => (
         <AccordionItem
           key={index}
